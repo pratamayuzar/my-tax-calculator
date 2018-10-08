@@ -63,6 +63,54 @@ class Test(unittest.TestCase):
 
         self.assertTrue('Input should be a integer' in str(context.exception))
 
+    def test_tax_insert(self):
+        """
+        Test for insert tax returns the success
+        """
+        data = {
+            'name': 'Small Mac',
+            'tax_code': 1,
+            'price': 500
+        }
+        result = self.tax.insert(data)
+        self.assertEqual(result, {'status': 1, 'result': 'Success'})
+
+    def test_tax_insert_error_mandatory(self):
+        """
+        Test for insert tax returns the error mandatory
+        """
+        data = {
+            'name': 'Small Mac',
+            'tax_code': 1
+        }
+        result = self.tax.insert(data)
+        self.assertEqual(result, {'message': 'Sorry field name, tax_code, price is mandatory', 'status': 0})
+
+    def test_tax_insert_error_other_field(self):
+        """
+        Test for insert tax returns the error only allowed field
+        """
+        data = {
+            'name': 'Small Mac',
+            'tax_code': 1,
+            'price': 500,
+            'amount': 500
+        }
+        result = self.tax.insert(data)
+        self.assertEqual(result, {'message': 'Sorry only field name, tax_code, price are allowed', 'status': 0})
+
+    def test_tax_insert_error_tax_code(self):
+        """
+        Test for insert tax returns the error tax code wrong
+        """
+        data = {
+            'name': 'Small Mac',
+            'tax_code': 4,
+            'price': 500
+        }
+        result = self.tax.insert(data)
+        self.assertEqual(result, {'message': 'Sorry your tax code wrong', 'status': 0})
+
 
 if __name__ == '__main__':
     unittest.main()
