@@ -31,15 +31,7 @@ class TaxController:
                     'price': tax_price,
                 }
 
-                if tax_code == 1:
-                    # 10% of price
-                    tax_value = 10 / 100 * tax_price
-                elif tax_code == 2:
-                    # 10 + (2% of price)
-                    tax_value = 10 + (2 / 100 * tax_price)
-                else:
-                    # price < 100 free, price >= 100 : 1% of (price - 100)
-                    tax_value = 0 if tax_price < 100 else 1 / 100 * (tax_price - 100)
+                tax_value = self.calculate_tax(tax_code, tax_price)
 
                 amount = tax_price + tax_value
 
@@ -56,6 +48,30 @@ class TaxController:
 
         except Exception as e:
             return {'status': 0, 'message': str(e)}
+
+    def calculate_tax(self, tax_code, tax_price):
+        try:
+            if type(tax_code) is str or type(tax_price) is str:
+                raise TypeError("Input should be a integer")
+
+            if str(tax_code) not in self.tax_codes:
+                raise Exception('Tax code wrong')
+
+            if tax_price < 0:
+                raise Exception("Tax price cannot minus")
+
+            if tax_code == 1:
+                # 10% of price
+                tax_value = 10 / 100 * tax_price
+            elif tax_code == 2:
+                # 10 + (2% of price)
+                tax_value = 10 + (2 / 100 * tax_price)
+            else:
+                # price < 100 free, price >= 100 : 1% of (price - 100)
+                tax_value = 0 if tax_price < 100 else 1 / 100 * (tax_price - 100)
+            return tax_value
+        except Exception:
+            raise
 
     def insert(self, data):
         try:

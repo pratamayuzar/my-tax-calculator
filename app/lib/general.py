@@ -8,7 +8,7 @@ class General:
             pymysql,
             host='localhost',
             user='root',
-            passwd='',
+            passwd='root',
             db='tax_calculator',
             charset='utf8',
             autocommit=True
